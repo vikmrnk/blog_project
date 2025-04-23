@@ -1,0 +1,52 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="content-section">
+            <h2 class="border-bottom pb-2 mb-4">
+                <i class="fas fa-trash-alt"></i> Delete Post
+            </h2>
+            
+            <div class="alert alert-danger">
+                <p class="mb-0">Are you sure you want to delete the post "{{ object.title }}"?</p>
+                <p class="mb-0"><small>This action cannot be undone.</small></p>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ object.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        <small>
+                            <i class="fas fa-calendar-alt"></i> {{ object.date_posted|date:"F d, Y" }}
+                            <span class="ml-3"><i class="fas fa-eye"></i> {{ object.views }} views</span>
+                            <span class="ml-3"><i class="fas fa-heart"></i> {{ object.likes.count }} likes</span>
+                        </small>
+                    </p>
+                    
+                    {% if object.summary %}
+                    <p>{{ object.summary }}</p>
+                    {% else %}
+                    <p>{{ object.content|truncatechars:200 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'post-detail' object.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Delete Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

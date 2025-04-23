@@ -1,0 +1,101 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <!-- User Profile -->
+    <div class="col-md-4">
+        <div class="content-section text-center">
+            <img src="{{ profile.profile_pic.url }}" class="profile-img mb-3" alt="{{ user_profile.username }}">
+            <h2>{{ user_profile.username }}</h2>
+            <p class="text-muted">{{ user_profile.email }}</p>
+            
+            <div class="mt-3">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="font-weight-bold">{{ post_count }}</div>
+                        <div class="small text-muted">Posts</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="font-weight-bold">{{ liked_count|default:"0" }}</div>
+                        <div class="small text-muted">Likes</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="font-weight-bold">{{ comment_count|default:"0" }}</div>
+                        <div class="small text-muted">Comments</div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if profile.bio %}
+            <div class="bio-section mt-4 text-left">
+                <h4>Bio</h4>
+                <p>{{ profile.bio }}</p>
+            </div>
+            {% endif %}
+            
+            {% if user.username == user_profile.username %}
+            <div class="mt-4">
+                <a href="{% url 'update-profile' %}" class="btn btn-outline-primary btn-block">
+                    <i class="fas fa-user-edit"></i> Edit Profile
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- User Posts -->
+    <div class="col-md-8">
+        <div class="content-section">
+            <h2 class="border-bottom pb-2 mb-4">
+                <i class="fas fa-clipboard-list"></i> {{ user_profile.username }}'s Posts
+            </h2>
+            
+            {% if posts %}
+                {% for post in posts %}
+                <article class="media mb-4">
+                    <div class="media-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>
+                                <a href="{% url 'post-detail' post.id %}" class="text-decoration-none">
+                                    {{ post.title }}
+                                </a>
+                            </h4>
+                            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                        </div>
+                        
+                        {% if post.summary %}
+                        <p>{{ post.summary }}</p>
+                        {% else %}
+                        <p>{{ post.content|truncatechars:150 }}</p>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="mr-3">
+                                    <i class="fas fa-eye"></i> {{ post.views }} views
+                                </span>
+                                <span>
+                                    <i class="fas fa-heart"></i> {{ post.likes.count }} likes
+                                </span>
+                            </div>
+                            
+                            <a href="{% url 'post-detail' post.id %}" class="btn btn-sm btn-outline-primary">
+                                Read More <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    No posts yet.
+                    {% if user.username == user_profile.username %}
+                    <a href="{% url 'new-post' %}">Create your first post!</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
