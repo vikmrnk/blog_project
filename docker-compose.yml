@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    expose:
+      - 8000
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=0
+      - DJANGO_SETTINGS_MODULE=blog_app.settings
+      - PYTHONPATH=/app
+      - DB_NAME=blog_db
+      - DB_USER=blog_user
+      - DB_PASSWORD=blog_password
+      - DB_HOST=db
+      - DB_PORT=5432
+    command: poetry run gunicorn blog_app.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: blog_db
+      POSTGRES_USER: blog_user
+      POSTGRES_PASSWORD: blog_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./static:/app/static
+      - ./media:/app/media
+    depends_on:
+      - web
+    restart: always
+
+volumes:
+  postgres_data: 
