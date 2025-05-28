@@ -27,10 +27,10 @@ SECRET_KEY = 'django-insecure-)(gb)*u61hx%u_xtl)45&f5tlrm$!%7ay#4fg3-8&#8uhfpu%)
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''),
-    'localhost',
-    '127.0.0.1',
-    '.onrender.com',
+    "blog-project-cmtq.onrender.com",
+    "localhost",
+    "127.0.0.1",
+    ".onrender.com",
 ]
 
 
