@@ -4,7 +4,8 @@
             <br><br><br><br>
             <div class="card my-5" >
 
-                <form class="card-body cardbody-color p-lg-5" >
+                <form class="card-body cardbody-color p-lg-5" method="post">
+                    {% csrf_token %}
                     <div class="text-center">
                         <img src=""
                             class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px"
