@@ -146,3 +146,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Login redirect
 LOGIN_REDIRECT_URL = 'home-page'
 LOGIN_URL = 'login-page'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://blog-project-cmtq.onrender.com",
+]
